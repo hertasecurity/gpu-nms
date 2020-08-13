@@ -1,9 +1,18 @@
-===================================================================== 
+===================================================================================
  NMS Benchmarking Framework
+===================================================================================
+
+ CUDA implementation of the algorithm described in the paper:
  
- "Work-Efficient Parallel Non-Maximum Suppression Kernels"
- Copyright (c) 2019 David Oro et al.
-=====================================================================
+ "Work-Efficient Parallel Non-Maximum Suppression Kernels" 
+
+ http://dx.doi.org/10.1093/comjnl/bxaa108
+ 
+ The Computer Journal
+
+ David Oro, Carles Fernández, Xavier Martorell, Javier Hernando
+===================================================================================
+
 
 * Requirements:
 
