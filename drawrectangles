@@ -1,0 +1,41 @@
+#!/usr/bin/python
+import sys
+from PIL import Image, ImageDraw
+
+# check arguments and print help if needed
+if (len(sys.argv) != 2):
+    print('\nUsage: drawrectangles  <coordinates.txt>\n\n')
+    sys.exit()
+
+# open detections
+f = open(sys.argv[1], 'r')
+
+# array of (x,y) coordinates, and dimensions
+detections = []
+dims = []
+
+# get detection (x,y) coordinates from text file
+for line in f:
+    str = line.split(",")
+    x = int(str[0])
+    y = int(str[1])
+    coords = [x,y]
+    dim = int(str[2])
+    score = float(str[3])
+    detections.append(coords)
+    dims.append(dim)
+
+# init canvas
+im = Image.open('oscars.png')
+draw = ImageDraw.Draw(im)
+
+# draw rectangles
+i = 0
+for det in detections:
+    x1, y1 = det[0], det[1]
+    x2, y2 = det[0] + dims[i], det[1] + dims[i]
+    draw.rectangle([x1, y1, x2, y2], outline=(255))
+    i += 1
+
+# save image
+im.save('oscarsdets.png')
