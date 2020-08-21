@@ -23,7 +23,10 @@
 * Build instructions:
 
            1. Set the GPU_ARCH and SM_ARCH variables in the Makefile according to 
-              the underlying NVIDIA GPU architecture of your computer
+              the underlying NVIDIA GPU architecture of your computer. For further 
+              details, please refer to our GitHub Wiki page:
+
+                    https://github.com/hertasecurity/gpu-nms/wiki
 
            2. Set your CUDA installation path in the Makefile (CUDA_HEADERS and 
               CUDA_LIBS variables)
