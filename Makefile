@@ -18,7 +18,7 @@ nmstest.o: nmstest.c nms.h
 	$(CC) -I$(CUDA_HEADERS) -onmstest.o -c nmstest.c
 
 nms.o:  nms.cu nms.h config.h
-	$(NVCC) -o nms.o -c nms.cu -O3 -gencode=arch=$(GPU_ARCH),code=$(SM_ARCH) -gencode=arch=$(GPU_ARCH),code=$(SM_ARCH)
+	$(NVCC) -o nms.o -c nms.cu -O3 -gencode=arch=$(GPU_ARCH),code=$(SM_ARCH) 
 
 clean:
 	rm -f nmstest nmstest.o nms.o
