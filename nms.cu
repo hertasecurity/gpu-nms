@@ -359,14 +359,15 @@ __global__ void reduce_nms_bitmap(uint8* nmsbitmap, uint8* pointsbitmap, int nde
 } 
 
 
-void non_maximum_suppression()
+int non_maximum_suppression()
 {
   dim3 pkthreads(1, 1, 1);
   dim3 pkgrid(1, 1, 1);
   int limit;
   float nms_elapsed_time;
-
+  cudaError_t err;
   
+
   limit = get_upper_limit(ndetections, 16);
 
   pkthreads.x = get_optimal_dim(limit);
@@ -378,10 +379,19 @@ void non_maximum_suppression()
   
   /* We build up the non-maximum supression bitmap matrix by removing overlapping windows */
   generate_nms_bitmap<<<pkgrid, pkthreads>>>(points, nmsbitmap, 0.3f);
-  
+
+  err = cudaGetLastError();
+
+  if(err != cudaSuccess)
+  {
+    printf("CUDA Error: %s\n", cudaGetErrorString(err));
+    return -1;
+  }
+ 
   cudaEventRecord(end_map_event, 0);
   cudaEventSynchronize(end_map_event);
   cudaEventElapsedTime(&nms_elapsed_time, begin_map_event, end_map_event);
+
   printf("NMS-MAP elapsed time: %.3f ms\n", nms_elapsed_time);
 
   pkthreads.x = MAX_DETECTIONS / N_PARTITIONS; 
@@ -394,10 +404,20 @@ void non_maximum_suppression()
   /* Then we perform a reduction for generating a point bitmap vector */
   reduce_nms_bitmap<<<pkgrid, pkthreads>>>(nmsbitmap, pointsbitmap, ndetections);
 
+  err = cudaGetLastError();
+
+  if(err != cudaSuccess)
+  {
+    printf("CUDA Error: %s\n", cudaGetErrorString(err));
+    return -1;
+  }
+
   cudaEventRecord(end_reduce_event, 0);
   cudaEventSynchronize(end_reduce_event);
   cudaEventElapsedTime(&nms_elapsed_time, begin_reduce_event, end_reduce_event);
+
   printf("NMS-REDUCE elapsed time: %.3f ms\n", nms_elapsed_time);
+  return 0;
 }
 
 

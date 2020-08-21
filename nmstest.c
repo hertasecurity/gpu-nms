@@ -138,7 +138,14 @@ int main(int argc, char *argv[])
   transfer_detections_to_gpu(); 
 
   /* Execute NMS on the GPU */
-  non_maximum_suppression();
+  res = non_maximum_suppression();
+
+  if(res < 0)
+  {
+     printf("Please update the SM_ARCH and GPU_ARCH variables in the Makefile with the parameters matching your GPU architecture, and recompile again the code.\n");
+     free_memory();
+     return -1;
+  }
 
   /* Dump detections after having performed the NMS */
   res = dump_merged_detections("output.txt");

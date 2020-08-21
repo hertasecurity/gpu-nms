@@ -30,7 +30,7 @@ int dump_merged_detections(const char* filename);
 int transfer_detections_to_gpu(); 
 int allocate_gpu_memory();
 void free_memory();
-void non_maximum_suppression();
+int non_maximum_suppression();
 
 #ifdef __cplusplus
 }
